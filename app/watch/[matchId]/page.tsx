@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { getMatchById } from "@/lib/mock-data";
+import { getMatchById } from "@/lib/api";
 import { LiveBadge } from "@/components/matches/LiveBadge";
 import { WatchContent } from "@/components/player/WatchContent";
 
@@ -11,7 +11,7 @@ export default async function WatchPage({
   params: Promise<{ matchId: string }>;
 }) {
   const { matchId } = await params;
-  const match = getMatchById(matchId);
+  const match = await getMatchById(matchId);
 
   if (!match) notFound();
 
@@ -36,7 +36,11 @@ export default async function WatchPage({
       </div>
 
       {/* Client: Player + Kanal Seçici */}
-      <WatchContent channels={match.channels} />
+      <WatchContent
+        channels={match.channels}
+        status={match.status}
+        startTime={match.startTime}
+      />
     </div>
   );
 }

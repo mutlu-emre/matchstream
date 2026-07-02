@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Sol alttaki Next.js dev göstergesini gizle (sadece dev modda görünürdü)
+  devIndicators: false,
 };
 
 export default nextConfig;
