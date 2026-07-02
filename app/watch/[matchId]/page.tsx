@@ -37,6 +37,7 @@ export default async function WatchPage({
 
       {/* Client: Player + Kanal Seçici */}
       <WatchContent
+        matchId={matchId}
         channels={match.channels}
         status={match.status}
         startTime={match.startTime}

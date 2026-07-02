@@ -8,12 +8,13 @@ import { VideoPlayer } from './VideoPlayer'
 import { ChannelSelector } from './ChannelSelector'
 
 interface WatchContentProps {
+  matchId: string
   channels: Channel[]
   status: Match['status']
   startTime: string
 }
 
-export function WatchContent({ channels, status, startTime }: WatchContentProps) {
+export function WatchContent({ matchId, channels, status, startTime }: WatchContentProps) {
   const [activeChannelId, setActiveChannelId] = useState<string>(channels[0]?.id ?? "")
   const activeChannel = channels.find((ch) => ch.id === activeChannelId) ?? channels[0]
 
@@ -44,7 +45,7 @@ export function WatchContent({ channels, status, startTime }: WatchContentProps)
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       <div className="w-full lg:w-3/4">
-        <VideoPlayer channel={activeChannel} />
+        <VideoPlayer matchId={matchId} channel={activeChannel} />
       </div>
       <div className="w-full lg:w-1/4 min-h-0">
         <ChannelSelector

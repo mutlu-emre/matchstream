@@ -16,10 +16,16 @@ const VideoPlayerCore = dynamic(
   }
 )
 
-export function VideoPlayer({ channel }: { channel: Channel | undefined }) {
+export function VideoPlayer({
+  matchId,
+  channel,
+}: {
+  matchId: string
+  channel: Channel | undefined
+}) {
   return (
     <div className="overflow-hidden rounded-xl border border-border-light dark:border-border-dark">
-      <VideoPlayerCore channel={channel} />
+      <VideoPlayerCore matchId={matchId} channel={channel} />
     </div>
   );
 }

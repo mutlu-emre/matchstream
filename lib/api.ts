@@ -19,6 +19,11 @@ interface MatchResponse {
   data: Match;
 }
 
+interface StreamResponse {
+  success: boolean;
+  data: { streamUrl: string; format: string; channelName: string };
+}
+
 /**
  * GET /api/matches → maç listesi + son güncelleme.
  * Next 16: fetch varsayılan cache'siz; 60 sn revalidate ile ISR benzeri davranış.
@@ -61,6 +66,32 @@ export async function getMatchById(id: string): Promise<Match | null> {
     if (!json.success || !json.data) return null;
 
     return json.data;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * GET /api/matches/:matchId/channels/:channelId/stream → oynatılacak stream URL.
+ * KARAR 1: URL cache'e gömülü değil, BE her istekte env'den güncel inşa eder.
+ * Client-side'dan (player) çağrılır; cache'lenmez (no-store).
+ * Bulunamazsa (404/503) veya hata → null.
+ */
+export async function getStreamUrl(
+  matchId: string,
+  channelId: string,
+): Promise<string | null> {
+  const url = `${API}/api/matches/${encodeURIComponent(
+    matchId,
+  )}/channels/${encodeURIComponent(channelId)}/stream`;
+  try {
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) return null;
+
+    const json = (await res.json()) as StreamResponse;
+    if (!json.success || !json.data?.streamUrl) return null;
+
+    return json.data.streamUrl;
   } catch {
     return null;
   }
